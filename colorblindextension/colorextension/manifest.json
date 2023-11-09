@@ -7,7 +7,7 @@
 	"icons": {},
 	"content_scripts": [
 		{
-			"matches": ["*://*/*"],
+			"matches": ["*://*/*", "file:///*"],
 
 			"js": ["scripts/jquery.min.js", "scripts/color.js"],
 			"css": ["css/color.css"],
