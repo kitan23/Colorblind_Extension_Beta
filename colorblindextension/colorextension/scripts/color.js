@@ -1177,8 +1177,6 @@ const applyFilterToImage = (imgIndex, imageList, nameID) => {
 
 	  function loadPreset() {
 
-
-
 		let retrieved = JSON.parse(localStorage.getItem("allSettings"));
 		console.log("Loading Preset");
 		console.log(retrieved);
@@ -1332,21 +1330,37 @@ const applyFilterToImage = (imgIndex, imageList, nameID) => {
 		const proImg = document.getElementById("pro");
 		const triImg = document.getElementById("tri");
 		const achImg = document.getElementById("ach");
+		
+
+		//FIX SO THAT IT GOES BACK TO BEIGE AFTER
+		//BETA: Creates Popups for each of the buttons.
 	document.addEventListener("mouseover", function (event) {
 
 		if (event.target.getAttribute("id") == "deuter") {
+			if (darkOrOriginal == "dark") {
+				colorblindPopup.style.backgroundColor = "darkslategrey"
+			}
 			colorblindPopup.innerText = "Deuteranopia has reduced sensitivity to green, so green colors are reduced.  "
 			colorblindPopup.style.visibility = "visible";
 			deuImg.style.visibility = "visible";
 		} else if (event.target.getAttribute("id") == "tritan") {
+			if (darkOrOriginal == "dark") {
+				colorblindPopup.style.backgroundColor = "darkslategrey"
+			}
 			colorblindPopup.innerText = "Tritanopia has reduced sensitivity to blue, so blue colors are reduced. "
 			colorblindPopup.style.visibility = "visible";
 			triImg.style.visibility = "visible";
 		} else if (event.target.getAttribute("id") == "achoma") {
+			if (darkOrOriginal == "dark") {
+				colorblindPopup.style.backgroundColor = "darkslategrey"
+			}
 			colorblindPopup.innerText = "Achomatropia has reduced sensitivity to all colors, so higher contrast is used."
 			colorblindPopup.style.visibility = "visible";
 			achImg.style.visibility = "visible";
 		} else if (event.target.getAttribute("id") == "protan") {
+			if (darkOrOriginal == "dark") {
+				colorblindPopup.style.backgroundColor = "darkslategrey"
+			}
 			colorblindPopup.innerText = "Protanopia has reduced sensitivity to red, so red colors are reduced. "
 			colorblindPopup.style.visibility = "visible";
 			proImg.style.visibility = "visible";

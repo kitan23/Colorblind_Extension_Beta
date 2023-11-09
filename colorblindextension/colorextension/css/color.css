@@ -59,7 +59,7 @@
 #popupMenu {
 	visibility: hidden;
 	/* display: grid; */
-	background-color: rgb(242, 237, 231);
+	background-color: beige;
 	padding-top: 20px;
 	padding-right: 30px;
 	padding-bottom: 20px;
