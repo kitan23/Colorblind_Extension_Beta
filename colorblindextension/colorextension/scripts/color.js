@@ -22,6 +22,10 @@ let blueSliderVal = 0;
 let greenSliderVal = 0;
 let darkOrOriginal = "original";
 let originalImages = true;
+let deu = false;
+let pro = false;
+let ach = false;
+let tri = false;
 
 
 
@@ -1158,7 +1162,11 @@ const applyFilterToImage = (imgIndex, imageList, nameID) => {
 			blueSlider: blueSliderVal,
 			greenSlider: greenSliderVal,
 			darkOriginal: darkOrOriginal, 
-			originalImage: originalImages
+			originalImage: originalImages,
+			protran: pro,
+			deuter: deu,
+			tritan: tri,
+			achro: ach
 		}
 
 		localStorage.setItem("allSettings", JSON.stringify(allSettings))
@@ -1198,12 +1206,27 @@ const applyFilterToImage = (imgIndex, imageList, nameID) => {
 		if (retrieved.originalImage == true) {
 			RevertImageToOri()
 		}
+		if (retrieved.achro == true) {
+			filterName = 8;
+			loopThroughImgs()
+		}
+		if (retrieved.protran == true) {
+			filterName = 6;
+			loopThroughImgs()
+		}
+		if (retrieved.deuter == true) {
+			filterName = 5;
+			loopThroughImgs()
+		}
+		if (retrieved.tritan == true) {
+			filterName = 7;
+			loopThroughImgs()
+		}
+
 
 
 
 	  }
-
-
 
 
 	// Create a mapping object
@@ -1292,17 +1315,18 @@ const applyFilterToImage = (imgIndex, imageList, nameID) => {
 			}
 		});
 
+
+		//BETA: Creates a popup describing the colorblind mode and a sample image (it currently isn't loading)
 		let popup = `
 		<div id="popupMenu">
-		
 		<p> Placeholder </p>
 		</div>
 		`;
 		$("body").prepend(popup);
-		$("body").prepend(`<img src="../deuteranopia.jpg" class="exampleImage" id="deu" width="200" height="250"></img>`);
-		$("body").prepend(`<img src="../protanopia.jpg" class="exampleImage" id="pro" width="200" height="250"></img>`);
-		$("body").prepend(`<img src="../tritanopia.jpg" class="exampleImage" id="tri" width="200" height="250"></img>`);
-		$("body").prepend(`<img src="../achromatopsia.jpg" class="exampleImage" id="ach" width="200" height="250"></img>`);
+		$("body").prepend(`<img src="deuteranopia.jpg" class="exampleImage" id="deu" width="200" height="250"></img>`);
+		$("body").prepend(`<img src="protanopia.jpg" class="exampleImage" id="pro" width="200" height="250"></img>`);
+		$("body").prepend(`<img src="tritanopia.jpg" class="exampleImage" id="tri" width="200" height="250"></img>`);
+		$("body").prepend(`<img src="achromatopsia.jpg" class="exampleImage" id="ach" width="200" height="250"></img>`);
 		const colorblindPopup = document.getElementById("popupMenu");
 		const deuImg = document.getElementById("deu");
 		const proImg = document.getElementById("pro");
@@ -1310,12 +1334,10 @@ const applyFilterToImage = (imgIndex, imageList, nameID) => {
 		const achImg = document.getElementById("ach");
 	document.addEventListener("mouseover", function (event) {
 
-
 		if (event.target.getAttribute("id") == "deuter") {
 			colorblindPopup.innerText = "Deuteranopia has reduced sensitivity to green, so green colors are reduced.  "
 			colorblindPopup.style.visibility = "visible";
 			deuImg.style.visibility = "visible";
-			//$("body").prepend(`<img src="../deuteranopia.jpg" width="400" height="250"></img>`);
 		} else if (event.target.getAttribute("id") == "tritan") {
 			colorblindPopup.innerText = "Tritanopia has reduced sensitivity to blue, so blue colors are reduced. "
 			colorblindPopup.style.visibility = "visible";
@@ -1332,6 +1354,8 @@ const applyFilterToImage = (imgIndex, imageList, nameID) => {
 
 	})
 
+
+	//BETA: when mouse exits an element, all popup images and text go away
 	document.addEventListener("mouseout", function (event) {
 		proImg.style.visibility = "hidden";
 		triImg.style.visibility = "hidden";
@@ -1355,18 +1379,34 @@ const applyFilterToImage = (imgIndex, imageList, nameID) => {
 			loopThroughImgs()
 		}
 		else if (event.target.id == "deuter"){
+			deu = true;
+			ach = false;
+			pro = false;
+			tri = false;
 			filterName = 5;
 			loopThroughImgs()
 		}
 		else if (event.target.id == "protan"){
+			pro = true;
+			deu = false;
+			ach = false;
+			tri = false;
 			filterName = 6;
 			loopThroughImgs()
 		}
 		else if (event.target.id == "tritan"){
+			tri = true;
+			deu = false;
+			ach = false;
+			pro = false
 			filterName = 7;
 			loopThroughImgs()
 		}
 		else if (event.target.id == "achoma"){
+			ach = true;
+			deu = false;
+			pro = false;
+			tri = false;
 			filterName = 8;
 			loopThroughImgs()
 		}
@@ -1429,113 +1469,118 @@ const applyFilterToImage = (imgIndex, imageList, nameID) => {
 	});
 
 
-	function fetchAverageColor(newImageElement) {
-		// Create the canvas element
-		console.log(typeof(newImageElement))
 
-		document.body.append(newImageElement)
-		newImageElement.crossOrigin = "Anonymous";
+	//CITE: https://www.geeksforgeeks.org/how-to-find-an-average-color-of-an-image-using-javascript/
+	//DESC: How to get average color of image in JS.
+	//BETA: Does not work. Will get working in final version.
+
+
+
+	// function fetchAverageColor(newImageElement) {
+	// 	// Create the canvas element
+	// 	console.log(typeof(newImageElement))
+
+	// 	document.body.append(newImageElement)
+	// 	newImageElement.crossOrigin = "Anonymous";
 
             
-		let canvas = document.createElement('canvas'),
+	// 	let canvas = document.createElement('canvas'),
  
-                // Get the 2D context of the canvas
-                context
-                    = canvas.getContext &&
-                    canvas.getContext('2d'),
-                imgData, width, height,
-                length,
+    //             // Get the 2D context of the canvas
+    //             context
+    //                 = canvas.getContext &&
+    //                 canvas.getContext('2d'),
+    //             imgData, width, height,
+    //             length,
  
-                // Define variables for storing
-                // the individual red, blue and
-                // green colors
-                rgb = { r: 0, g: 0, b: 0 },
+    //             // Define variables for storing
+    //             // the individual red, blue and
+    //             // green colors
+    //             rgb = { r: 0, g: 0, b: 0 },
  
-                // Define variable for the 
-                // total number of colors
-                count = 0;
+    //             // Define variable for the 
+    //             // total number of colors
+    //             count = 0;
 
  
-            // Set the height and width equal
-            // to that of the canvas and the image
-            height = canvas.height =
-                newImageElement.naturalHeight ||
-                newImageElement.offsetHeight ||
-                newImageElement.height;
-            width = canvas.width =
-                newImageElement.naturalWidth ||
-                newImageElement.offsetWidth ||
-                newImageElement.width;
+    //         // Set the height and width equal
+    //         // to that of the canvas and the image
+    //         height = canvas.height =
+    //             newImageElement.naturalHeight ||
+    //             newImageElement.offsetHeight ||
+    //             newImageElement.height;
+    //         width = canvas.width =
+    //             newImageElement.naturalWidth ||
+    //             newImageElement.offsetWidth ||
+    //             newImageElement.width;
 
-		console.log(canvas)
+	// 	console.log(canvas)
  
-            // Draw the image to the canvas
-            context.drawImage(newImageElement, 0, 0);
-			console.log(context)
+    //         // Draw the image to the canvas
+    //         context.drawImage(newImageElement, 0, 0);
+	// 		console.log(context)
  
-            // Get the data of the image
-            imgData = context.getImageData(0, 0, width, height);
-			console.log(imgData)
-			document.body.append(canvas);
-
-
- 
-            // Get the length of image data object
-            length = imgData.data.length;
+    //         // Get the data of the image
+    //         imgData = context.getImageData(0, 0, width, height);
+	// 		console.log(imgData)
+	// 		document.body.append(canvas);
 
 
  
-            for (let i = 0; i < length; i += 4) {
+    //         // Get the length of image data object
+    //         length = imgData.data.length;
+
+
  
-                // Sum all values of red colour
-                rgb.r += imgData.data[i];
+    //         for (let i = 0; i < length; i += 4) {
  
-                // Sum all values of green colour
-                rgb.g += imgData.data[i + 1];
+    //             // Sum all values of red colour
+    //             rgb.r += imgData.data[i];
  
-                // Sum all values of blue colour
-                rgb.b += imgData.data[i + 2];
+    //             // Sum all values of green colour
+    //             rgb.g += imgData.data[i + 1];
+ 
+    //             // Sum all values of blue colour
+    //             rgb.b += imgData.data[i + 2];
  
 
-                count++;
-            }
+    //             count++;
+    //         }
  
-            rgb.r = Math.floor(rgb.r / count);
-            rgb.g = Math.floor(rgb.g / count);
-            rgb.b = Math.floor(rgb.b / count);
-			console.log(count)
-            return rgb;
-        }
+    //         rgb.r = Math.floor(rgb.r / count);
+    //         rgb.g = Math.floor(rgb.g / count);
+    //         rgb.b = Math.floor(rgb.b / count);
+	// 		console.log(count)
+    //         return rgb;
+    //     }
 
 	const everyElement = document.querySelectorAll("body > *");
-	for (const element of everyElement) {
-		let cssvalues = getComputedStyle(element);
-		let backgroundImg = cssvalues.getPropertyValue("background-image")
-		let backgroundStrRegex = /\".*\"/;
-		let regexMatch = backgroundImg.match(backgroundStrRegex);
 
-		if (element.textContent != ""  && regexMatch != null) {
-			//console.log(Object.values(regexMatch)[0])
-			// let theImageUrl = Object.values(regexMatch)[0];
 
-			let newImageElement = new Image();
-			newImageElement.src = "https://upload.wikimedia.org/wikipedia/commons/3/38/Flamingos_in_flight.jpg";
 
-			newImageElement.setAttribute('width', '500px')
-			newImageElement.setAttribute('height', '300px')
-			newImageElement.setAttribute('class', 'averageColor')
-			document.body.append(newImageElement)
-			//let averagecolorimg = document.getElementsByClassName("averageColor")
-			//console.log(typeof(averagecolorimg[0]))
-			console.log("this image is" + newImageElement)
-			console.log(fetchAverageColor(newImageElement))
+	// for (const element of everyElement) {
+	// 	let cssvalues = getComputedStyle(element);
+	// 	let backgroundImg = cssvalues.getPropertyValue("background-image")
+	// 	let backgroundStrRegex = /\".*\"/;
+	// 	let regexMatch = backgroundImg.match(backgroundStrRegex);
 
-			//Once this is fetched, use the values to calculate a good contrast color
-			//get this so be the right color, and to show up over text
-			//element.style.backgroundColor = "red";
-			//console.log(fetchAverageColor(theImageUrl.substring(1, theImageUrl.length - 1)))
-		}
-	  }
+	// 	if (element.textContent != ""  && regexMatch != null) {
+	// 		//console.log(Object.values(regexMatch)[0])
+	// 		// let theImageUrl = Object.values(regexMatch)[0];
+
+	// 		let newImageElement = new Image();
+	// 		newImageElement.src = "https://upload.wikimedia.org/wikipedia/commons/3/38/Flamingos_in_flight.jpg";
+
+	// 		newImageElement.setAttribute('width', '500px')
+	// 		newImageElement.setAttribute('height', '300px')
+	// 		newImageElement.setAttribute('class', 'averageColor')
+	// 		document.body.append(newImageElement)
+	// 		//let averagecolorimg = document.getElementsByClassName("averageColor")
+	// 		//console.log(typeof(averagecolorimg[0]))
+	// 		console.log("this image is" + newImageElement)
+	// 		console.log(fetchAverageColor(newImageElement))
+	// 	}
+	//   }
 
 	// ---------------------------------------------------
 	// Call Function
