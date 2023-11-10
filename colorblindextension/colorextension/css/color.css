@@ -29,6 +29,53 @@
 	z-index: 999;/* BETA */
 }
 
+
+.exampleImage {
+	/* visibility: hidden; */
+	display: grid;
+	position: fixed;
+	left: 25%;
+	z-index: 999;/* BETA */
+}
+
+#pro {
+	visibility: hidden;
+
+}
+
+#deu {
+	visibility: hidden;
+}
+
+#tri {
+	visibility: hidden;
+}
+
+#ach{
+	visibility: hidden;
+}
+
+
+#popupMenu {
+	visibility: hidden;
+	/* display: grid; */
+	background-color: beige;
+	padding-top: 20px;
+	padding-right: 30px;
+	padding-bottom: 20px;
+	padding-left: 30px;
+	border-width:8px;
+	border-style:solid;
+	border-color:black;
+	padding: 5px;
+	border-width: thin;
+	position: fixed;
+	width: 100px;
+	left: 30%;
+	top: 50%;
+	z-index: 999;/* BETA */
+}
+
 .choiceItem {
 	padding: 20px;
 	background-color: rgb(242, 237, 231);
